@@ -19,6 +19,7 @@ services:
       POSTGRES_HOSTNAME: postgres
       POSTGRES_PASSWORD: PASSWORD
       POSTGRES_USER: guacamole_user
+      WEBAPP_CONTEXT: 'ROOT'
     ports:
     - 6849:8080
     restart: unless-stopped
