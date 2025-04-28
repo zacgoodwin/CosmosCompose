@@ -33,5 +33,4 @@ services:
     image: postgres
     restart: unless-stopped
     volumes:
-    - /usr/guacd/init:/docker-entrypoint-initdb.d
     - /usr/guacd/data:/var/lib/postgresql/data
