@@ -4,8 +4,4 @@ services:
     image: wisdomsky/cloudflared-web:latest
     restart: unless-stopped
     environment:
-      WEBUI_PORT: 1111
-    volumes:
-      - /usr/cloudflared/config:/config
-    ports:
-      - 12394:1111
+      WEBUI_PORT: 14333
