@@ -1,0 +1,11 @@
+services:
+   dumbwhois:
+      image: dumbwareio/dumbwhois:latest
+      container_name: dumbwhois
+      restart: unless-stopped
+      ports:
+      - 3000:3001
+      environment:
+      - SITE_TITLE=Dumbwhois
+      # (Optional) Restrict origins - ex: https://subdomain.domain.tld,https://auth.proxy.tld,http://internalip:port' (empty/default is '*')
+      # - ALLOWED_ORIGINS=${DUMBWHOIS_ALLOWED_ORIGINS:-*}
