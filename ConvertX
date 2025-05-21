@@ -1,0 +1,50 @@
+{
+  "services": {
+    "convertx": {
+      "container_name": "convertx",
+      "image": "ghcr.io/c4illin/convertx",
+      "environment": [
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bun-node-fallback-bin",
+        "BUN_RUNTIME_TRANSPILER_CACHE_PATH=0",
+        "BUN_INSTALL_BIN=/usr/local/bin",
+        "NODE_ENV=production"
+      ],
+      "labels": {
+        "org.opencontainers.image.created": "2025-04-01T12:16:01.060Z",
+        "org.opencontainers.image.description": "💾 Self-hosted online file converter. Supports 1000+ formats ⚙️",
+        "org.opencontainers.image.licenses": "AGPL-3.0",
+        "org.opencontainers.image.revision": "5b6e70eb3a3e5d2eba7a32080cddce8e494feef3",
+        "org.opencontainers.image.source": "https://github.com/C4illin/ConvertX",
+        "org.opencontainers.image.title": "ConvertX",
+        "org.opencontainers.image.url": "https://github.com/C4illin/ConvertX",
+        "org.opencontainers.image.version": "v0.12.1"
+      },
+      "ports": [
+        "0.0.0.0:303:3030/tcp",
+        ":::3030:3030/tcp"
+      ],
+      "volumes": [
+        {
+          "Type": "bind",
+          "Source": "/usr/convertx",
+          "Target": "/app/data"
+        }
+      ],
+      "routes": null,
+      "restart": "unless-stopped",
+      "devices": null,
+      "expose": [],
+      "entrypoint": "bun run ./src/index.tsx",
+      "runtime": "runc",
+      "working_dir": "/app",
+      "hostname": "convertx",
+      "healthcheck": {
+        "test": null,
+        "interval": 0,
+        "timeout": 0,
+        "retries": 0,
+        "start_period": 0
+      }
+    }
+  }
+}
