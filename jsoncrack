@@ -14,7 +14,6 @@
       ],
       "labels": {
         "cosmos-auto-update": "true",
-        "cosmos-force-network-mode": "cosmos-jsoncrack-default",
         "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>",
         "org.opencontainers.image.created": "2024-11-22T08:31:01.369Z",
         "org.opencontainers.image.description": "✨ Innovative and open-source visualization application that transforms various data formats, such as JSON, YAML, XML, CSV and more, into interactive graphs.",
@@ -32,9 +31,6 @@
         ":::8888:8080/tcp"
       ],
       "volumes": [],
-      "networks": {
-        "cosmos-jsoncrack-default": {}
-      },
       "routes": null,
       "restart": "unless-stopped",
       "devices": null,
@@ -46,7 +42,6 @@
       "runtime": "runc",
       "working_dir": "/app",
       "hostname": "jsoncrack",
-      "network_mode": "cosmos-jsoncrack-default",
       "stop_signal": "SIGQUIT",
       "healthcheck": {
         "test": null,
