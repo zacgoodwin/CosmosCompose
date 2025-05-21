@@ -6,6 +6,6 @@ services:
     environment:
       WEBUI_PORT: 1111
     volumes:
-      - /usr/cloudflared/config: /config
+      - /usr/cloudflared/config:/config
     ports:
       - 12394:1111
