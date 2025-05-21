@@ -1,0 +1,60 @@
+{
+  "services": {
+    "jsoncrack": {
+      "container_name": "jsoncrack",
+      "image": "ghcr.io/mms-gianni/jsoncrack.com:main",
+      "environment": [
+        "NODE_ENV=production",
+        "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "NGINX_VERSION=1.26.2",
+        "NJS_VERSION=0.8.5",
+        "NJS_RELEASE=1~bookworm",
+        "PKG_RELEASE=1~bookworm",
+        "DYNPKG_RELEASE=2~bookworm"
+      ],
+      "labels": {
+        "cosmos-auto-update": "true",
+        "cosmos-force-network-mode": "cosmos-jsoncrack-default",
+        "maintainer": "NGINX Docker Maintainers <docker-maint@nginx.com>",
+        "org.opencontainers.image.created": "2024-11-22T08:31:01.369Z",
+        "org.opencontainers.image.description": "✨ Innovative and open-source visualization application that transforms various data formats, such as JSON, YAML, XML, CSV and more, into interactive graphs.",
+        "org.opencontainers.image.licenses": "NOASSERTION",
+        "org.opencontainers.image.revision": "03d188c97916e1ac904a250b7394d2762e4dfd5a",
+        "org.opencontainers.image.source": "https://github.com/mms-gianni/jsoncrack.com",
+        "org.opencontainers.image.title": "jsoncrack.com",
+        "org.opencontainers.image.url": "https://github.com/mms-gianni/jsoncrack.com",
+        "org.opencontainers.image.version": "main"
+      },
+      "ports": [
+        "0.0.0.0:8889:80/tcp",
+        ":::8889:80/tcp",
+        "0.0.0.0:8888:8080/tcp",
+        ":::8888:8080/tcp"
+      ],
+      "volumes": [],
+      "networks": {
+        "cosmos-jsoncrack-default": {}
+      },
+      "routes": null,
+      "restart": "unless-stopped",
+      "devices": null,
+      "expose": [],
+      "tty": true,
+      "stdin_open": true,
+      "command": "nginx -g daemon off;",
+      "entrypoint": "/docker-entrypoint.sh",
+      "runtime": "runc",
+      "working_dir": "/app",
+      "hostname": "jsoncrack",
+      "network_mode": "cosmos-jsoncrack-default",
+      "stop_signal": "SIGQUIT",
+      "healthcheck": {
+        "test": null,
+        "interval": 0,
+        "timeout": 0,
+        "retries": 0,
+        "start_period": 0
+      }
+    }
+  }
+}
