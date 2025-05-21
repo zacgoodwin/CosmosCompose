@@ -1,0 +1,19 @@
+version: "2.1"
+services:
+  kasm:
+    image: kasmweb/workspaces:1.15.0
+    privileged: true
+    container_name: kasm
+    environment:
+      - KASM_PORT=443 #optional
+      - DOCKER_HUB_USERNAME= #optional
+      - DOCKER_HUB_PASSWORD= #optional
+    volumes:
+      - /usr/kasm/local/storage:/opt
+      - /usr/kasm/profiles:/profiles #optional
+      - /dev/input:/dev/input #optional
+      - /run/udev/data:/run/udev/data #optional
+    ports:
+      - 443:443
+      - 3040:3040
+    restart: unless-stopped
