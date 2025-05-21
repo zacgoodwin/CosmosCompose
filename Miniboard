@@ -1,0 +1,16 @@
+version: "3"
+services:
+  miniboard:
+    image: aceberg/miniboard
+    restart: unless-stopped
+    ports:
+    - 9678:8849
+    volumes:
+    - /usr/miniboard:/data/miniboard       # app data (set your own path instead of dockerdata)
+    - /var/run/docker.sock:/var/run/docker.sock     # Only needed to create panel from Docker containers automatically
+    environment:
+      TZ: America/Los_Angeles    # required for uptime monitor, default ""
+      HOST: "0.0.0.0"         # optional, default: 0.0.0.0
+      PORT: "8849"            # optional, default: 8849
+      THEME: "sandstone"         # optional, default: flatly
+      COLOR: "dark"           # optional, default: dark
