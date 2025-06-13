@@ -2,31 +2,31 @@ services:
   rallly_db:
     image: postgres:14.2
     restart: always
-    ports:
-      - 5450:5432
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - /usr/rallly/db-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=rallly
+      - POSTGRES_PASSWORD=REPLACEME
+      - POSTGRES_DB=ralllydb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-
-  rallly_selfhosted:
+  rallly:
     image: lukevella/rallly:latest
-    restart: unless-stopped
+    restart: always
+    depends_on:
+      - rallly_db
     ports:
-      - 3039:3000
+      - 3930:3000
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@rallly_db/rallly
-      - SECRET_PASSWORD=
-      - NEXT_PUBLIC_BASE_URL=
-      - AUTH_URL=
-      - DIRECT_DATABASE_URL=postgres://postgres:postgres@localhost:5450/rallly
-      - SUPPORT_EMAIL=
-      - NEXT_PUBLIC_SELF_HOSTED=true
-      - SENTRY_IGNORE_API_RESOLUTION_ERROR=1
+      - DATABASE_URL=postgres://postgres:REPLACEME@rallly_db/ralllydb
+      - SECRET_PASSWORD=0rflzwKcEjgLHtVukqRx31PBK9AGhg5oA9cYWWTBh0jurp8vpXJLjv2EQC8ZTwvZ
+      - NEXT_PUBLIC_BASE_URL=https://meet.blah.net
+      - SUPPORT_EMAIL=notifications@blah.net
       - SMTP_HOST=
-      - SMTP_PORT=
-      - SMTP_SECURE=t
+      - SMTP_PORT=587
+      - SMTP_SECURE=
       - SMTP_USER=
       - SMTP_PWD=
