@@ -22,7 +22,7 @@ services:
       - 3930:3000
     environment:
       - DATABASE_URL=postgres://postgres:REPLACEME@rallly_db/ralllydb
-      - SECRET_PASSWORD=0rflzwKcEjgLHtVukqRx31PBK9AGhg5oA9cYWWTBh0jurp8vpXJLjv2EQC8ZTwvZ
+      - SECRET_PASSWORD=GENNEWONE
       - NEXT_PUBLIC_BASE_URL=https://meet.blah.net
       - SUPPORT_EMAIL=notifications@blah.net
       - SMTP_HOST=
