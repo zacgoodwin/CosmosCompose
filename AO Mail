@@ -1,0 +1,112 @@
+services:
+  db:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend_network
+    ports:
+      - "${DB_PORT}:5432"
+    restart: unless-stopped
+
+  backend_dev:
+    build:
+      context: ./backend
+      target: development
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_PORT=${BACKEND_PORT}
+      - ENV=${ENV}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - "${BACKEND_PORT}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+    networks:
+      - backend_network
+    volumes:
+      - ./backend:/app
+      - /home/prod/prod/backend/media/agent_icon:/app/media/agent_icon
+      - /home/prod/prod/backend/media/pictures:/app/media/pictures
+      - /home/prod/prod/backend/media/labels:/app/media/labels
+    restart: unless-stopped
+
+  backend_prod:
+    build:
+      context: ./backend
+      target: production
+    environment:
+      - FRONTEND_PORT=${FRONTEND_PORT}
+      - BACKEND_PORT=${BACKEND_PORT}
+      - ENV=${ENV}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    ports:
+      - "${BACKEND_PORT}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: [ "gunicorn", "config.asgi:application", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000" ]
+    networks:
+      - backend_network
+    volumes:
+      - /home/prod/prod/backend/media/agent_icon:/app/media/agent_icon
+      - /home/prod/prod/backend/media/pictures:/app/media/pictures
+      - /home/prod/prod/backend/media/labels:/app/media/labels
+    restart: unless-stopped
+
+  frontend_dev:
+    build:
+      context: ./frontend
+      target: development
+      args:
+        VUE_APP_ENV: ${ENV}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - VUE_APP_ENV=${ENV}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - VUE_APP_BASE_URL=${BASE_URL}
+      - VUE_APP_API_BASE_URL=${API_BASE_URL}
+    ports:
+      - "${FRONTEND_PORT}:${SERVER_FRONTEND_PORT}"
+    depends_on:
+      - backend_dev
+    networks:
+      - frontend_network
+    volumes:
+      - ./frontend:/app
+    restart: unless-stopped
+
+  frontend_prod:
+    build:
+      context: ./frontend
+      target: production
+      args:
+        VUE_APP_ENV: ${ENV}
+        VUE_APP_BASE_URL: ${BASE_URL}
+        VUE_APP_API_BASE_URL: ${API_BASE_URL}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - VUE_APP_ENV=${ENV}
+      - VUE_APP_BASE_URL=${BASE_URL}
+      - VUE_APP_API_BASE_URL=${API_BASE_URL}
+    ports:
+      - "${FRONTEND_PORT}:${SERVER_FRONTEND_PORT}"
+    depends_on:
+      - backend_prod
+    networks:
+      - frontend_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
