@@ -11,8 +11,6 @@ services:
       - 7869:11434
     environment:
       - OLLAMA_KEEP_ALIVE=24h
-    networks:
-      - ollama-docker
     deploy:
       resources:
         reservations:
