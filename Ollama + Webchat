@@ -1,4 +1,5 @@
-ollama:
+services:
+  ollama:
     volumes:
       - /usr/ollama/ollama:/root/.ollama
     container_name: ollama
