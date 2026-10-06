@@ -1,0 +1,60 @@
+networks:
+  mailarchiver: Null
+services:
+  mailarchive-app:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - >-
+        ConnectionStrings__DefaultConnection=Host=postgres;Database=MailArchiver;Username=mailuser;Password=masterkey;
+      - Authentication__Username=admin
+      - Authentication__Password=secure123!
+      - TimeZone__DisplayTimeZoneId=America/Los_Angeles
+      - PUID=568
+      - PGID=568
+      - OAuth__Enabled=true
+      - OAuth__Authority=
+      - OAuth__ClientId=
+      - OAuth__ClientSecret=
+      - OAuth__DisplayName=
+      - OAuth__ClientScopes__0=openid
+      - OAuth__ClientScopes__1=profile
+      - OAuth__ClientScopes__2=email
+      - OAuth__ClientScopes__3=groups
+      - OAuth__DisablePasswordLogin=false
+      - OAuth__AutoApproveUsers=true
+  # Enable bandwidth tracking for Gmail
+      - BandwidthTracking__Enabled=true
+      - BandwidthTracking__DailyLimitMb=2500
+      - BandwidthTracking__WarningThresholdPercent=80
+      - BandwidthTracking__PauseHoursOnLimit=24
+    image: s1t5/mailarchiver:latest
+    networks:
+      - mailarchiver
+    ports:
+      - '5000:5000'
+    restart: always
+    volumes:
+      - /mnt/main/srv/mailarchiver/data-protection-keys:/app/DataProtection-Keys
+  postgres:
+    environment:
+      PGID: 568
+      POSTGRES_DB: MailArchiver
+      POSTGRES_PASSWORD: masterkey
+      POSTGRES_USER: mailuser
+      PUID: 568
+    healthcheck:
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      test:
+        - CMD-SHELL
+        - pg_isready -U mailuser -d MailArchiver
+      timeout: 5s
+    image: postgres:17-alpine
+    networks:
+      - mailarchiver
+    restart: always
+    volumes:
+      - /mnt/main/srv/mailarchiver/postgres-data:/var/lib/postgresql/data
